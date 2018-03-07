@@ -7,14 +7,14 @@ A CryptoNote based Cryptocurrency.
 The advent of the Dosh Cryptocurrency is a coherent outcome to the
 prerequisite for a more decentralized untraceable digital cash. 
 
-DOSH is a CryptoNote based Cryptocurrency that utilizes proof-of-work to keep the network secure.
+Dosh is a CryptoNote based Cryptocurrency that utilizes proof-of-work to keep the network secure.
 CryptoNight is the hashing algorithm used in stance to keep the network fairly accessible and distributed.
 
-By using DOSH, you prevent any entity from obtaining your transactional history as the default mechanics of DOSH is to
+By using Dosh, you prevent any entity from obtaining your transactional history as the default mechanics of Dosh is to
 obfuscate your activity. Participants are effectively protected by Ring Signatures when sending and receiving funds.
 
 # Purpose
-Our endeavor is to establish DOSH as a privacy focused decentralized Cryptocurrency, with the use of
+Our endeavor is to establish Dosh as a privacy focused decentralized Cryptocurrency, with the use of
 an Egalitarian proof-of-work system where all participants have equal voting rights within the network.
 
 This coin is for the users of the network and should remain fairly distributed. All development stages will be voted and
