@@ -1,0 +1,3 @@
+Release notes 0.0.1
+
+Dosh project is now located on GitHub
