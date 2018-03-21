@@ -64,9 +64,12 @@ Then Build within Visual Studio.
 
 # Using Dosh
 
-On Unix Terminal: nohup ./doshd & --config ../../../dosh.conf
-On Windows CMD  : doshd.exe --config ..\..\..\dosh.conf
+On Unix Terminal: nohup ./doshd & --config dosh.conf
+
+On Windows CMD  : doshd.exe --config dosh.conf
+
 
 # Using Simplewallet
-On Unix Terminal: ./simplewallet --config ../../../dosh.conf
-On Windows CMD  : simplewallet.exe --config ..\..\..\dosh.conf
+On Unix Terminal: ./simplewallet --config dosh.conf
+
+On Windows CMD  : simplewallet.exe --config dosh.conf
