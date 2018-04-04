@@ -41,7 +41,7 @@ Alternatively, install them as follows:
 sudo apt-get update
 sudo apt-get install cmake libboost-all-dev build-essential
 
-To build, change to a directory where this file is located, and run `make'. The resulting executables can be found in build/release/src.
+To build, change to the dosh directory and run `make'. The resulting executables can be found in dosh/build/release/src.
 
 Advanced options:
 Parallel build: run `make -j<number of threads>' instead of `make'.
