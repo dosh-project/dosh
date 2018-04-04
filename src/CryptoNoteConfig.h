@@ -24,6 +24,7 @@
 namespace CryptoNote {
 namespace parameters {
 
+const uint64_t DIFFICULTY_TARGET                             = 120; // seconds
 const uint32_t CRYPTONOTE_MAX_BLOCK_NUMBER                   = 500000000;
 const size_t   CRYPTONOTE_MAX_BLOCK_BLOB_SIZE                = 500000000;
 const size_t   CRYPTONOTE_MAX_TX_SIZE                        = 1000000000;
@@ -31,7 +32,10 @@ const size_t   CRYPTONOTE_MAX_TX_SIZE                        = 1000000000;
 const uint64_t CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX       = 0xb9;
 // changed from 10
 const uint32_t CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW          = 60;
-const uint64_t CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT            = 60 * 60 * 2;
+
+// LWMA config
+// const uint64_t CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT            = 60 * 60 * 2;
+const uint64_t CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT	     = DIFFICULTY_TARGET * 7;
 
 const size_t   BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW             = 60;
 
@@ -64,12 +68,14 @@ const uint64_t DEFAULT_DUST_THRESHOLD                        = 1000000;
 
 // Use 0 for default max transaction size limit
 const uint64_t MAX_TRANSACTION_SIZE_LIMIT                    = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE * 125 / 100 - CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE; // was 100000
-const uint64_t DEFAULT_FEE                         	         = MINIMUM_FEE;
+const uint64_t DEFAULT_FEE                         	     = MINIMUM_FEE;
 
-const uint64_t DIFFICULTY_TARGET                             = 120; // seconds
 const uint64_t EXPECTED_NUMBER_OF_BLOCKS_PER_DAY             = 24 * 60 * 60 / DIFFICULTY_TARGET;
 
-const size_t   DIFFICULTY_WINDOW                             = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY; // blocks
+// LWMA config
+// const size_t   DIFFICULTY_WINDOW                             = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY; // blocks
+const size_t   DIFFICULTY_WINDOW			     = 60 + 1; // blocks (add one to compensate off-by-one in difficulty calculation)
+
 const size_t   DIFFICULTY_WINDOW_V1                          = DIFFICULTY_WINDOW;
 const size_t   DIFFICULTY_WINDOW_V2                          = DIFFICULTY_WINDOW;
 const size_t   DIFFICULTY_CUT                                = 60;  // timestamps to cut after sorting
@@ -89,7 +95,8 @@ const size_t   DIFFICULTY_LAG_V2                             = DIFFICULTY_LAG;
 // const size_t   DIFFICULTY_LAG_V1                             = 15;
 // const size_t   DIFFICULTY_LAG_V2                             = 15;
 
-static_assert(2 * DIFFICULTY_CUT <= DIFFICULTY_WINDOW - 2, "Bad DIFFICULTY_WINDOW or DIFFICULTY_CUT");
+// Not used for LWMA
+// static_assert(2 * DIFFICULTY_CUT <= DIFFICULTY_WINDOW - 2, "Bad DIFFICULTY_WINDOW or DIFFICULTY_CUT");
 
 const size_t   MAX_BLOCK_SIZE_INITIAL                        = 100000; // 20 * 1024;
 const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_NUMERATOR         = 100 * 1024;
