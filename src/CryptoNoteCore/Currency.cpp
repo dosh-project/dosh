@@ -455,7 +455,8 @@ Difficulty Currency::nextDifficulty(std::vector<uint64_t> timestamps,
   // See https://github.com/zawy12/difficulty-algorithms/issues/1 for other algos.
   // Do not use "if solvetime < 0 then solvetime = 1" which allows a catastrophic exploit.
   // T= target_solvetime;
-  // N = int(45 * (600 / T) ^ 0.3));
+  // N=45, 55, 70, 90, 120 for T=600, 240, 120, 90, 60
+  // increase 50% if coin is large & not expecting large hash attacks
 
   const int64_t T = static_cast<int64_t>(m_difficultyTarget);
   const size_t N = CryptoNote::parameters::DIFFICULTY_WINDOW -1;
@@ -473,6 +474,7 @@ Difficulty Currency::nextDifficulty(std::vector<uint64_t> timestamps,
   }
 
   // To get an average solvetime to within +/- ~0.1%, use an adjustment factor.
+  // use adjust = 1.00 if N > 89
   const double_t adjust = 0.998;
   // The divisor k normalizes LWMA.
   const double_t k = N * (N + 1) / 2;
@@ -484,7 +486,8 @@ Difficulty Currency::nextDifficulty(std::vector<uint64_t> timestamps,
   // Loop through N most recent blocks
   for(int64_t i = 1; i <= N; i++){
     solveTime = static_cast<int64_t>(timestamps[i]) - static_cast<int64_t>(timestamps[i - 1]);
-    solveTime = std::min<int64_t>((T * 7), std::max<int64_t>(solveTime, (-6 * T)));
+    // use +5 and -5 If N <50
+    solveTime = std::min<int64_t>((T * 7), std::max<int64_t>(solveTime, (-7 * T)));
     difficulty = cumulativeDifficulties[i] - cumulativeDifficulties[i - 1];
     LWMA += solveTime * i / k;
     sum_inverse_D += 1 / static_cast<double_t>(difficulty);
