@@ -90,6 +90,7 @@ const command_line::arg_descriptor<uint32_t> arg_log_level = { "set_log", "", IN
   const command_line::arg_descriptor<uint32_t>    arg_CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW  = {"CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW", "uint32_t", CryptoNote::parameters::CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW};
   const command_line::arg_descriptor<size_t>      arg_MAX_BLOCK_SIZE_INITIAL  = {"MAX_BLOCK_SIZE_INITIAL", "size_t", CryptoNote::parameters::MAX_BLOCK_SIZE_INITIAL};
   const command_line::arg_descriptor<uint64_t>    arg_EXPECTED_NUMBER_OF_BLOCKS_PER_DAY  = {"EXPECTED_NUMBER_OF_BLOCKS_PER_DAY", "uint64_t"};
+  const command_line::arg_descriptor<uint32_t>    arg_UPGRADE_HEIGHT_V2 = {"UPGRADE_HEIGHT_V2", "uint32_t", 0};
   const command_line::arg_descriptor<uint32_t>    arg_KEY_IMAGE_CHECKING_BLOCK_INDEX  = {"KEY_IMAGE_CHECKING_BLOCK_INDEX", "uint32_t", 0};
   const command_line::arg_descriptor<size_t>      arg_DIFFICULTY_WINDOW_V1  = {"DIFFICULTY_WINDOW_V1", "size_t", 0};
   const command_line::arg_descriptor<size_t>      arg_DIFFICULTY_WINDOW_V2  = {"DIFFICULTY_WINDOW_V2", "size_t", 0};

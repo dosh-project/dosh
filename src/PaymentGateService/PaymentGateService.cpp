@@ -134,6 +134,10 @@ bool PaymentGateService::init(int argc, char** argv) {
   }
   currencyBuilder.maxBlockSizeGrowthSpeedDenominator(365 * 24 * 60 * 60 / config.coinBaseConfig.DIFFICULTY_TARGET);
   currencyBuilder.lockedTxAllowedDeltaSeconds(config.coinBaseConfig.DIFFICULTY_TARGET * CryptoNote::parameters::CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS);
+  if (config.coinBaseConfig.UPGRADE_HEIGHT_V2 && config.coinBaseConfig.UPGRADE_HEIGHT_V2 != 0)
+  {
+    currencyBuilder.upgradeHeightV2(config.coinBaseConfig.UPGRADE_HEIGHT_V2);
+  }
   if (config.coinBaseConfig.KEY_IMAGE_CHECKING_BLOCK_INDEX && config.coinBaseConfig.KEY_IMAGE_CHECKING_BLOCK_INDEX != 0)
   {
     currencyBuilder.keyImageCheckingBlockIndex(config.coinBaseConfig.KEY_IMAGE_CHECKING_BLOCK_INDEX);

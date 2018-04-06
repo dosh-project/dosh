@@ -865,6 +865,7 @@ bool RpcServer::f_on_get_blockchain_settings(const F_COMMAND_RPC_GET_BLOCKCHAIN_
   res.core.CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2 = m_core.getCurrency().blockGrantedFullRewardZoneV2();
   res.core.CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = m_core.getCurrency().publicAddressBase58Prefix();
   res.core.MAX_BLOCK_SIZE_INITIAL = m_core.getCurrency().maxBlockSizeInitial();
+  res.core.UPGRADE_HEIGHT_V2 = m_core.getCurrency().upgradeHeight(2);
   res.core.DIFFICULTY_WINDOW = m_core.getCurrency().difficultyWindow();
   res.core.DIFFICULTY_CUT = m_core.getCurrency().difficultyCut();
   res.core.DIFFICULTY_LAG = m_core.getCurrency().difficultyLag();

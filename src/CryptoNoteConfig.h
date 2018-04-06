@@ -58,7 +58,7 @@ static_assert(EMISSION_SPEED_FACTOR <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED
 
 const size_t   CRYPTONOTE_REWARD_BLOCKS_WINDOW               = 100;
 const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE     = 100000; //size of block (bytes) after which reward for block calculated using block size
-const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2  = 20000;
+const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2  = 100000;
 const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1  = 10000;
 const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_CURRENT = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE;
 const size_t   CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE        = 600;
@@ -72,12 +72,10 @@ const uint64_t DEFAULT_FEE                         	     = MINIMUM_FEE;
 
 const uint64_t EXPECTED_NUMBER_OF_BLOCKS_PER_DAY             = 24 * 60 * 60 / DIFFICULTY_TARGET;
 
-// LWMA config
-// const size_t   DIFFICULTY_WINDOW                             = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY; // blocks
-const size_t   DIFFICULTY_WINDOW			     = 60 + 1; // blocks (add one to compensate off-by-one in difficulty calculation)
-
+const size_t   DIFFICULTY_WINDOW                             = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY; // blocks
 const size_t   DIFFICULTY_WINDOW_V1                          = DIFFICULTY_WINDOW;
-const size_t   DIFFICULTY_WINDOW_V2                          = DIFFICULTY_WINDOW;
+const size_t   DIFFICULTY_WINDOW_V2			                     = 60 + 1; // blocks (add one to compensate off-by-one in difficulty calculation)
+
 const size_t   DIFFICULTY_CUT                                = 60;  // timestamps to cut after sorting
 const size_t   DIFFICULTY_CUT_V1                             = DIFFICULTY_CUT;
 const size_t   DIFFICULTY_CUT_V2                             = DIFFICULTY_CUT;
@@ -85,17 +83,6 @@ const size_t   DIFFICULTY_LAG                                = 15;  // !!!
 const size_t   DIFFICULTY_LAG_V1                             = DIFFICULTY_LAG;
 const size_t   DIFFICULTY_LAG_V2                             = DIFFICULTY_LAG;
 
-// const size_t   DIFFICULTY_WINDOW                             = 17; // blocks
-// const size_t   DIFFICULTY_WINDOW_V1                          = 720;
-// const size_t   DIFFICULTY_WINDOW_V2                          = 720;
-// const size_t   DIFFICULTY_CUT                                = 0;  // timestamps to cut after sorting
-// const size_t   DIFFICULTY_CUT_V1                             = 60;
-// const size_t   DIFFICULTY_CUT_V2                             = 60;
-// const size_t   DIFFICULTY_LAG                                = 0;
-// const size_t   DIFFICULTY_LAG_V1                             = 15;
-// const size_t   DIFFICULTY_LAG_V2                             = 15;
-
-// Not used for LWMA
 // static_assert(2 * DIFFICULTY_CUT <= DIFFICULTY_WINDOW - 2, "Bad DIFFICULTY_WINDOW or DIFFICULTY_CUT");
 
 const size_t   MAX_BLOCK_SIZE_INITIAL                        = 100000; // 20 * 1024;
@@ -114,6 +101,7 @@ const size_t   FUSION_TX_MIN_INPUT_COUNT                     = 12;
 const size_t   FUSION_TX_MIN_IN_OUT_COUNT_RATIO              = 4;
 
 const uint32_t KEY_IMAGE_CHECKING_BLOCK_INDEX                = 0;
+const uint32_t UPGRADE_HEIGHT_V2                             = 27000;
 const unsigned UPGRADE_VOTING_THRESHOLD                      = 90;               // percent
 const uint32_t UPGRADE_VOTING_WINDOW                         = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
 const uint32_t UPGRADE_WINDOW                                = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
