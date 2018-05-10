@@ -38,6 +38,7 @@
 #include "Common/Util.h"
 #include "CryptoNoteCore/CryptoNoteFormatUtils.h"
 #include "CryptoNoteProtocol/CryptoNoteProtocolHandler.h"
+#include "Mnemonics/electrum-words.cpp"
 #include "NodeRpcProxy/NodeRpcProxy.h"
 #include "Rpc/CoreRpcServerCommandsDefinitions.h"
 #include "Rpc/HttpClient.h"
@@ -90,7 +91,8 @@ const command_line::arg_descriptor<uint32_t> arg_log_level = { "set_log", "", IN
   const command_line::arg_descriptor<uint32_t>    arg_CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW  = {"CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW", "uint32_t", CryptoNote::parameters::CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW};
   const command_line::arg_descriptor<size_t>      arg_MAX_BLOCK_SIZE_INITIAL  = {"MAX_BLOCK_SIZE_INITIAL", "size_t", CryptoNote::parameters::MAX_BLOCK_SIZE_INITIAL};
   const command_line::arg_descriptor<uint64_t>    arg_EXPECTED_NUMBER_OF_BLOCKS_PER_DAY  = {"EXPECTED_NUMBER_OF_BLOCKS_PER_DAY", "uint64_t"};
-  const command_line::arg_descriptor<uint32_t>    arg_UPGRADE_HEIGHT_V2 = {"UPGRADE_HEIGHT_V2", "uint32_t", 0};
+  const command_line::arg_descriptor<uint32_t>    arg_UPGRADE_HEIGHT_V2  = {"UPGRADE_HEIGHT_V2", "uint32_t", 0};
+  const command_line::arg_descriptor<uint32_t>    arg_UPGRADE_HEIGHT_V3  = {"UPGRADE_HEIGHT_V3", "uint32_t", 0};
   const command_line::arg_descriptor<uint32_t>    arg_KEY_IMAGE_CHECKING_BLOCK_INDEX  = {"KEY_IMAGE_CHECKING_BLOCK_INDEX", "uint32_t", 0};
   const command_line::arg_descriptor<size_t>      arg_DIFFICULTY_WINDOW_V1  = {"DIFFICULTY_WINDOW_V1", "size_t", 0};
   const command_line::arg_descriptor<size_t>      arg_DIFFICULTY_WINDOW_V2  = {"DIFFICULTY_WINDOW_V2", "size_t", 0};
@@ -320,6 +322,7 @@ std::string tryToOpenWalletOrLoadKeysOrThrow(LoggerRef& logger, std::unique_ptr<
 
   if (walletExists) {
     logger(INFO) << "Loading wallet...";
+    logger(INFO) << "IF the wallet seems to hang, just wait until syncing is done.";
     std::ifstream walletFile;
     walletFile.open(walletFileName, std::ios_base::binary | std::ios_base::in);
     if (walletFile.fail()) {
@@ -554,14 +557,15 @@ bool simple_wallet::init(const boost::program_options::variables_map& vm) {
     return false;
   }
 
+bool key_import = true;
   if (m_generate_new.empty() && m_wallet_file_arg.empty()) {
-    std::cout << "Nor 'generate-new-wallet' neither 'wallet-file' argument was specified.\nWhat do you want to do?\n[O]pen existing wallet, [G]enerate new wallet file, [I]mport wallet or [E]xit.\n";
+    std::cout << "Nor 'generate-new-wallet' neither 'wallet-file' argument was specified.\nWhat do you want to do?\n[O]pen existing wallet, [G]enerate new wallet file, [I]mport wallet, [M]nemonic import or [E]xit.\n";
     char c;
     do {
       std::string answer;
       std::getline(std::cin, answer);
       c = answer[0];
-      if (!(c == 'O' || c == 'G' || c == 'E' || c == 'I' || c == 'o' || c == 'g' || c == 'e' || c == 'i')) {
+     if (!(c == 'O' || c == 'G' || c == 'E' || c == 'I' || c == 'M' || c == 'o' || c == 'g' || c == 'e' || c == 'i' || c == 'm')) {
         std::cout << "Unknown command: " << c <<std::endl;
       } else {
         break;
@@ -581,6 +585,10 @@ bool simple_wallet::init(const boost::program_options::variables_map& vm) {
     } while (userInput.empty());
 
     if (c == 'i' || c == 'I') {
+  key_import = true;
+  m_import_new = userInput;
+} else if (c == 'm' || c == 'M') {
+  key_import = false;
       m_import_new = userInput;
     } else if (c == 'g' || c == 'G') {
       m_generate_new = userInput;
@@ -674,6 +682,11 @@ bool simple_wallet::init(const boost::program_options::variables_map& vm) {
 
     std::string private_spend_key_string;
     std::string private_view_key_string;
+
+Crypto::SecretKey private_spend_key;
+Crypto::SecretKey private_view_key;
+
+if (key_import) {
     do {
       std::cout << "Private Spend Key: ";
       std::getline(std::cin, private_spend_key_string);
@@ -684,7 +697,24 @@ bool simple_wallet::init(const boost::program_options::variables_map& vm) {
       std::getline(std::cin, private_view_key_string);
       boost::algorithm::trim(private_view_key_string);
     } while (private_view_key_string.empty());
+} else {
+  std::string mnemonic_phrase;
 
+  do {
+    std::cout << "Mnemonics Phrase (25 words): ";
+    std::getline(std::cin, mnemonic_phrase);
+    boost::algorithm::trim(mnemonic_phrase);
+    boost::algorithm::to_lower(mnemonic_phrase);
+  } while (!is_valid_mnemonic(mnemonic_phrase, private_spend_key));
+
+  /* This is not used, but is needed to be passed to the function, not sure how we can avoid this */
+  Crypto::PublicKey unused_dummy_variable;
+
+  AccountBase::generateViewFromSpend(private_spend_key, private_view_key, unused_dummy_variable);
+}
+
+/* We already have our keys if we import via mnemonic seed */
+if (key_import) {
     Crypto::Hash private_spend_key_hash;
     Crypto::Hash private_view_key_hash;
     size_t size;
@@ -694,8 +724,9 @@ bool simple_wallet::init(const boost::program_options::variables_map& vm) {
     if (!Common::fromHex(private_view_key_string, &private_view_key_hash, sizeof(private_view_key_hash), size) || size != sizeof(private_spend_key_hash)) {
       return false;
     }
-    Crypto::SecretKey private_spend_key = *(struct Crypto::SecretKey *) &private_spend_key_hash;
-    Crypto::SecretKey private_view_key = *(struct Crypto::SecretKey *) &private_view_key_hash;
+      private_spend_key = *(struct Crypto::SecretKey *) &private_spend_key_hash;
+      private_view_key = *(struct Crypto::SecretKey *) &private_view_key_hash;
+    }
 
     if (!new_wallet(private_spend_key, private_view_key, walletFileName, pwd_container.password())) {
       logger(ERROR, BRIGHT_RED) << "account creation failed";
@@ -730,6 +761,93 @@ bool simple_wallet::init(const boost::program_options::variables_map& vm) {
   }
 
   return true;
+}
+//----------------------------------------------------------------------------------------------------
+/* Be careful using this function. It does generate a mnemonic seed
+perfectly well from a private spend key, however, simplewallet previously
+generated a random spend and view key, which were unrelated. With this set of
+commits, this has been changed, to make the view key derived from the spend
+key. This is done by running keccak-256 on the input, and then using that as
+a seed to create a set of private and public keys, the spend private and public
+keys.
+
+With this implemented, users only need to save a private spend key, or the
+mnemonic seed, which is a nice way of representing the spend key. However,
+we don't want users with the old way of generating keys thinking they only need
+to keep their mnemonic seed, because this will only generate their private
+spend key, and NOT their private view key - and they won't be able to restore
+their funds.
+*/
+std::string simple_wallet::generate_mnemonic(Crypto::SecretKey &private_spend_key) {
+
+  std::string mnemonic_str;
+
+  if (!crypto::ElectrumWords::bytes_to_words(private_spend_key, mnemonic_str, "English")) {
+      logger(ERROR, BRIGHT_RED) << "Cant create the mnemonic for the private spend key!";
+  }
+
+  return mnemonic_str;
+}
+//----------------------------------------------------------------------------------------------------
+void simple_wallet::log_incorrect_words(std::vector<std::string> words) {
+  Language::Base *language = Language::Singleton<Language::English>::instance();
+  const std::vector<std::string> &dictionary = language->get_word_list();
+
+  for (auto i : words) {
+    if (std::find(dictionary.begin(), dictionary.end(), i) == dictionary.end()) {
+      logger(ERROR, BRIGHT_RED) << i << " is not in the english word list!";
+    }
+  }
+}
+//----------------------------------------------------------------------------------------------------
+bool simple_wallet::is_valid_mnemonic(std::string &mnemonic_phrase, Crypto::SecretKey &private_spend_key) {
+
+  /* Uncommenting these will allow importing of different languages, exporting
+     in different languages however has not been added, as it will require
+     changing the export_keys command to take an argument to specify what
+     language the seed should be exported in. For now, multilanguage support
+     has been disabled as there are a couple of issues - we can't print out
+     what words aren't present in the dictionary if we don't know what
+     dictionary they are using, and it's a lot more friendly to work that
+     out automatically rather than asking, and secondly, it is possible that
+     dictionaries of other words can overlap enough to allow an esperanto
+     seed for example to be imported as an english seed */
+
+  //static std::string languages[] = {"English", "Nederlands", "Français", "Português", "Italiano", "Deutsch", "русский язык", "简体中文 (中国)", "Esperanto", "Lojban"};
+  static std::string languages[] = {"English"};
+
+  //static const int num_of_languages = 10;
+  static const int num_of_languages = 1;
+
+  static const int mnemonic_phrase_length = 25;
+
+  std::vector<std::string> words;
+
+  words = boost::split(words, mnemonic_phrase, ::isspace);
+
+  if (words.size() != mnemonic_phrase_length) {
+    logger(ERROR, BRIGHT_RED) << "Invalid mnemonic phrase!";
+    logger(ERROR, BRIGHT_RED) << "Seed phrase is not 25 words! Please try again.";
+    log_incorrect_words(words);
+    return false;
+  }
+
+  /* Check every language for our phrase so the user doesn't have to specify
+     it, this shouldn't be an issue as long as one language doesn't have enough
+     of another languages words, might need some testing */
+  for (int i = 0; i < num_of_languages; i++) {
+    if (crypto::ElectrumWords::words_to_bytes(mnemonic_phrase, private_spend_key, languages[i])) {
+      return true;
+    }
+  }
+
+  /* The issue with this is if we try and automagically determine what language
+     the seed phrase is in, then we can't log words which aren't in the x
+     dictionary, we will have to take an argument to know what language they
+     are in, but this is less user friendly. */
+  logger(ERROR, BRIGHT_RED) << "Invalid mnemonic phrase!";
+  log_incorrect_words(words);
+  return false;
 }
 //----------------------------------------------------------------------------------------------------
 bool simple_wallet::deinit() {
@@ -852,6 +970,7 @@ bool simple_wallet::new_wallet(Crypto::SecretKey &secret_key, Crypto::SecretKey 
     "Always use \"exit\" command when closing simplewallet to save\n" <<
     "current session's state. Otherwise, you will possibly need to synchronize \n" <<
     "your wallet again. Your wallet key is NOT under risk anyway.\n" <<
+    "If shown -> Height <h> of <N> : Please wait for your wallet to sync when importing.\n" <<
     "**********************************************************************";
   return true;
 }
@@ -1032,6 +1151,20 @@ bool simple_wallet::export_keys(const std::vector<std::string>& args/* = std::ve
   m_wallet->getAccountKeys(keys);
   success_msg_writer(true) << "Spend secret key: " << Common::podToHex(keys.spendSecretKey);
   success_msg_writer(true) << "View secret key: " <<  Common::podToHex(keys.viewSecretKey);
+  Crypto::PublicKey unused_dummy_variable;
+  Crypto::SecretKey deterministic_private_view_key;
+
+  AccountBase::generateViewFromSpend(keys.spendSecretKey, deterministic_private_view_key, unused_dummy_variable);
+
+  bool deterministic_private_keys = deterministic_private_view_key == keys.viewSecretKey;
+
+/* Only output the mnemonic seed if it's valid for this wallet - the old
+   wallet code generated random spend and view keys so we can't create a
+   mnemonic seed */
+  if (deterministic_private_keys) {
+    std::cout << "Mnemonic seed: " << generate_mnemonic(keys.spendSecretKey) << std::endl;
+  }
+
 
   return true;
 }
@@ -1264,6 +1397,8 @@ int main(int argc, char* argv[]) {
   command_line::add_arg(desc_params, arg_CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW);
   command_line::add_arg(desc_params, arg_MAX_BLOCK_SIZE_INITIAL);
   command_line::add_arg(desc_params, arg_EXPECTED_NUMBER_OF_BLOCKS_PER_DAY);
+  command_line::add_arg(desc_params, arg_UPGRADE_HEIGHT_V2);
+  command_line::add_arg(desc_params, arg_UPGRADE_HEIGHT_V3);
   command_line::add_arg(desc_params, arg_KEY_IMAGE_CHECKING_BLOCK_INDEX);
   command_line::add_arg(desc_params, arg_DIFFICULTY_WINDOW);
   command_line::add_arg(desc_params, arg_DIFFICULTY_CUT);
@@ -1379,6 +1514,14 @@ int main(int argc, char* argv[]) {
   }
   currencyBuilder.maxBlockSizeGrowthSpeedDenominator(365 * 24 * 60 * 60 / command_line::get_arg(vm, arg_DIFFICULTY_TARGET));
   currencyBuilder.lockedTxAllowedDeltaSeconds(command_line::get_arg(vm, arg_DIFFICULTY_TARGET) * CryptoNote::parameters::CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS);
+  if (command_line::has_arg(vm, arg_UPGRADE_HEIGHT_V2) && command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V2) != 0)
+  {
+    currencyBuilder.upgradeHeightV2(command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V2));
+  }
+  if (command_line::has_arg(vm, arg_UPGRADE_HEIGHT_V3) && command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V3) != 0)
+  {
+    currencyBuilder.upgradeHeightV3(command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V3));
+  }
   if (command_line::has_arg(vm, arg_KEY_IMAGE_CHECKING_BLOCK_INDEX) && command_line::get_arg(vm, arg_KEY_IMAGE_CHECKING_BLOCK_INDEX) != 0)
   {
     currencyBuilder.keyImageCheckingBlockIndex(command_line::get_arg(vm, arg_KEY_IMAGE_CHECKING_BLOCK_INDEX));

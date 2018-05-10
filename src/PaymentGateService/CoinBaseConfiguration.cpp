@@ -67,6 +67,7 @@ CoinBaseConfiguration::CoinBaseConfiguration() {
     MAX_BLOCK_SIZE_INITIAL=CryptoNote::parameters::MAX_BLOCK_SIZE_INITIAL;
     EXPECTED_NUMBER_OF_BLOCKS_PER_DAY=0;
     UPGRADE_HEIGHT_V2=0;
+    UPGRADE_HEIGHT_V3=0;
     KEY_IMAGE_CHECKING_BLOCK_INDEX=0;
     DIFFICULTY_WINDOW=CryptoNote::parameters::DIFFICULTY_WINDOW;
     DIFFICULTY_WINDOW_V1=CryptoNote::parameters::DIFFICULTY_WINDOW_V1;
@@ -111,6 +112,7 @@ void CoinBaseConfiguration::initOptions(boost::program_options::options_descript
     ("EXPECTED_NUMBER_OF_BLOCKS_PER_DAY", po::value<uint64_t>()->default_value(0), "uint64_t")
     ("KEY_IMAGE_CHECKING_BLOCK_INDEX", po::value<uint32_t>()->default_value(0), "uint32_t")
     ("UPGRADE_HEIGHT_V2", po::value<uint32_t>()->default_value(0), "uint32_t")
+    ("UPGRADE_HEIGHT_V3", po::value<uint32_t>()->default_value(0), "uint32_t")
     ("DIFFICULTY_WINDOW", po::value<size_t>()->default_value(0), "size_t")
     ("DIFFICULTY_WINDOW_V1", po::value<size_t>()->default_value(0), "size_t")
     ("DIFFICULTY_WINDOW_V2", po::value<size_t>()->default_value(0), "size_t")
@@ -209,6 +211,9 @@ void CoinBaseConfiguration::init(const boost::program_options::variables_map& op
   }
   if (options.count("UPGRADE_HEIGHT_V2")) {
     UPGRADE_HEIGHT_V2 = options["UPGRADE_HEIGHT_V2"].as<uint32_t>();
+  }
+  if (options.count("UPGRADE_HEIGHT_V3")) {
+    UPGRADE_HEIGHT_V3 = options["UPGRADE_HEIGHT_V3"].as<uint32_t>();
   }
   if (options.count("KEY_IMAGE_CHECKING_BLOCK_INDEX")) {
     KEY_IMAGE_CHECKING_BLOCK_INDEX = options["KEY_IMAGE_CHECKING_BLOCK_INDEX"].as<uint32_t>();

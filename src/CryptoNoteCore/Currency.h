@@ -118,6 +118,7 @@ size_t difficultyBlocksCountByBlockVersion(uint8_t blockMajorVersion) const;
   const std::string& blockIndexesFileName() const { return m_blockIndexesFileName; }
   const std::string& txPoolFileName() const { return m_txPoolFileName; }
 
+  bool isBlockexplorer() const { return m_isBlockexplorer; }
   bool isTestnet() const { return m_testnet; }
 
   const BlockTemplate& genesisBlock() const { return cachedGenesisBlock->getBlock(); }
@@ -246,6 +247,7 @@ private:
 
   bool m_testnet;
   std::string m_genesisCoinbaseTxHex;
+  bool m_isBlockexplorer;
 
   BlockTemplate genesisBlockTemplate;
   std::unique_ptr<CachedBlock> cachedGenesisBlock;
@@ -343,7 +345,8 @@ public:
   CurrencyBuilder& blocksFileName(const std::string& val) { m_currency.m_blocksFileName = val; return *this; }
   CurrencyBuilder& blockIndexesFileName(const std::string& val) { m_currency.m_blockIndexesFileName = val; return *this; }
   CurrencyBuilder& txPoolFileName(const std::string& val) { m_currency.m_txPoolFileName = val; return *this; }
-
+  
+  CurrencyBuilder& isBlockexplorer(const bool val) { m_currency.m_isBlockexplorer = val; return *this; }
   CurrencyBuilder& genesisCoinbaseTxHex(const std::string& val) { m_currency.m_genesisCoinbaseTxHex = val; return *this; }
   CurrencyBuilder& testnet(bool val) { m_currency.m_testnet = val; return *this; }
 
