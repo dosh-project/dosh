@@ -17,6 +17,7 @@
 
 #include "Currency.h"
 #include <cctype>
+#include <math.h>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/lexical_cast.hpp>
 #include "../Common/Base58.h"
@@ -840,6 +841,7 @@ m_expectedNumberOfBlocksPerDay(currency.m_expectedNumberOfBlocksPerDay),
 m_blockGrantedFullRewardZoneV1(currency.m_blockGrantedFullRewardZoneV1),
 m_blockGrantedFullRewardZoneV2(currency.m_blockGrantedFullRewardZoneV2),
 m_keyImageCheckingBlockIndex(currency.m_keyImageCheckingBlockIndex),
+m_isBlockexplorer(currency.m_isBlockexplorer),
 m_minerTxBlobReservedSize(currency.m_minerTxBlobReservedSize),
 m_maxTransactionSizeLimit(currency.m_maxTransactionSizeLimit),
 m_numberOfDecimalPlaces(currency.m_numberOfDecimalPlaces),
@@ -952,6 +954,7 @@ fusionTxMaxSize(parameters::MAX_TRANSACTION_SIZE_LIMIT * 30 / 100);
 
   keyImageCheckingBlockIndex(parameters::KEY_IMAGE_CHECKING_BLOCK_INDEX);
   upgradeHeightV2(parameters::UPGRADE_HEIGHT_V2);
+  upgradeHeightV3(parameters::UPGRADE_HEIGHT_V3);
   upgradeVotingThreshold(parameters::UPGRADE_VOTING_THRESHOLD);
   upgradeVotingWindow(parameters::UPGRADE_VOTING_WINDOW);
   upgradeWindow(parameters::UPGRADE_WINDOW);
@@ -960,6 +963,7 @@ fusionTxMaxSize(parameters::MAX_TRANSACTION_SIZE_LIMIT * 30 / 100);
   blockIndexesFileName(parameters::CRYPTONOTE_BLOCKINDEXES_FILENAME);
   txPoolFileName(parameters::CRYPTONOTE_POOLDATA_FILENAME);
 
+  isBlockexplorer(false);
   testnet(false);
 }
 

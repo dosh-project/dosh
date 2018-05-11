@@ -335,6 +335,7 @@ int CryptoNoteProtocolHandler::handle_notify_new_block(int command, NOTIFY_NEW_B
       logger(Logging::TRACE) << context << "Block already exists";
     }
   } else if (result == error::AddBlockErrorCondition::BLOCK_REJECTED) {
+    m_p2p->drop_connection(context, true);
     context.m_state = CryptoNoteConnectionContext::state_synchronizing;
     NOTIFY_REQUEST_CHAIN::request r = boost::value_initialized<NOTIFY_REQUEST_CHAIN::request>();
     r.block_ids = m_core.buildSparseChain();

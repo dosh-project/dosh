@@ -567,6 +567,11 @@ bool RpcServer::on_stop_daemon(const COMMAND_RPC_STOP_DAEMON::request& req, COMM
 // JSON RPC methods
 //------------------------------------------------------------------------------------------------------------------------------
 bool RpcServer::f_on_blocks_list_json(const F_COMMAND_RPC_GET_BLOCKS_LIST::request& req, F_COMMAND_RPC_GET_BLOCKS_LIST::response& res) {
+  // check if blockchain explorer RPC is enabled
+  if (m_core.getCurrency().isBlockexplorer() == false) {
+    return false;
+  }
+
   if (m_core.getTopBlockIndex() + 1 <= req.height) {
     throw JsonRpc::JsonRpcError{ CORE_RPC_ERROR_CODE_TOO_BIG_HEIGHT,
       std::string("To big height: ") + std::to_string(req.height) + ", current blockchain height = " + std::to_string(m_core.getTopBlockIndex() + 1) };
@@ -606,6 +611,11 @@ bool RpcServer::f_on_blocks_list_json(const F_COMMAND_RPC_GET_BLOCKS_LIST::reque
 }
 
 bool RpcServer::f_on_block_json(const F_COMMAND_RPC_GET_BLOCK_DETAILS::request& req, F_COMMAND_RPC_GET_BLOCK_DETAILS::response& res) {
+  // check if blockchain explorer RPC is enabled
+  if (m_core.getCurrency().isBlockexplorer() == false) {
+    return false;
+  }
+
   Hash hash;
 
   try {
@@ -699,6 +709,11 @@ bool RpcServer::f_on_block_json(const F_COMMAND_RPC_GET_BLOCK_DETAILS::request& 
 }
 
 bool RpcServer::f_on_transaction_json(const F_COMMAND_RPC_GET_TRANSACTION_DETAILS::request& req, F_COMMAND_RPC_GET_TRANSACTION_DETAILS::response& res) {
+  // check if blockchain explorer RPC is enabled
+  if (m_core.getCurrency().isBlockexplorer() == false) {
+    return false;
+  }
+
   Hash hash;
 
   if (!parse_hash256(req.hash, hash)) {
@@ -778,6 +793,11 @@ bool RpcServer::f_on_transaction_json(const F_COMMAND_RPC_GET_TRANSACTION_DETAIL
 
 
 bool RpcServer::f_on_transactions_pool_json(const F_COMMAND_RPC_GET_POOL::request& req, F_COMMAND_RPC_GET_POOL::response& res) {
+  // check if blockchain explorer RPC is enabled
+  if (m_core.getCurrency().isBlockexplorer() == false) {
+    return false;
+  }
+
   auto pool = m_core.getPoolTransactions();
   for (const Transaction tx : pool) {
     f_transaction_short_response transaction_short;
@@ -866,6 +886,7 @@ bool RpcServer::f_on_get_blockchain_settings(const F_COMMAND_RPC_GET_BLOCKCHAIN_
   res.core.CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = m_core.getCurrency().publicAddressBase58Prefix();
   res.core.MAX_BLOCK_SIZE_INITIAL = m_core.getCurrency().maxBlockSizeInitial();
   res.core.UPGRADE_HEIGHT_V2 = m_core.getCurrency().upgradeHeight(2);
+  res.core.UPGRADE_HEIGHT_V3 = m_core.getCurrency().upgradeHeight(3);
   res.core.DIFFICULTY_WINDOW = m_core.getCurrency().difficultyWindow();
   res.core.DIFFICULTY_CUT = m_core.getCurrency().difficultyCut();
   res.core.DIFFICULTY_LAG = m_core.getCurrency().difficultyLag();
