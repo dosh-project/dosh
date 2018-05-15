@@ -66,12 +66,16 @@ To build, change to the dosh directory and run `make'. The resulting executables
 
 # Using Dosh
 
-On Unix Terminal: nohup ./doshd & --config dosh.conf
+On Unix Terminal: 
+* ./doshd --config dosh.conf
 
-On Windows CMD  : doshd.exe --config dosh.conf
+On Windows CMD: 
+* doshd.exe --config dosh.conf
 
 
 # Using Simplewallet
-On Unix Terminal: ./simplewallet --config dosh.conf
+On Unix Terminal: 
+* ./simplewallet --config dosh.conf
 
-On Windows CMD  : simplewallet.exe --config dosh.conf
+On Windows CMD: 
+* simplewallet.exe --config dosh.conf
