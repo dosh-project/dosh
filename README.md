@@ -79,3 +79,15 @@ On Unix Terminal:
 
 On Windows CMD: 
 * simplewallet.exe --config dosh.conf
+
+
+### Extras
+
+To run a block explorer, simply clone from latest commit as the release binaries have not activated this feature.
+
+Then make sure to add the following parameters to your dosh.conf file:
+* rpc-bind-ip=0.0.0.0
+* enable-blockchain-indexes=1
+* enable-cors=*
+* enable-blockexplorer=1
+* rpc-bind-port=18333
