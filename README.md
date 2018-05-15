@@ -29,19 +29,19 @@ funded by the community in the effort to improve the project.
 
 # Building Dosh
 
-On Unix:
+### Dependencies:
+* GCC 4.7.3+
+* CMake 2.8.6+
+* Boost 1.55+
+* (Windows only) - Microsoft Visual Studio 2017
 
-Dependencies: GCC 4.7.3 or later, CMake 2.8.6 or later, and Boost 1.55.
+### On Windows:
+
 You may download them from:
-http://gcc.gnu.org/
-http://www.cmake.org/
-http://www.boost.org/
-
-Alternatively, install them as follows:
-sudo apt-get update
-sudo apt-get install cmake libboost-all-dev build-essential
-
-To build, change to the dosh directory and run `make'. The resulting executables can be found in dosh/build/release/src.
+* http://gcc.gnu.org/
+* http://www.cmake.org/
+* http://www.boost.org/
+* http://www.microsoft.com/
 
 Advanced options:
 Parallel build: run `make -j<number of threads>' instead of `make'.
@@ -49,18 +49,20 @@ Debug build: run `make build-debug'.
 Test suite: run `make test-release' to run tests in addition to building. Running `make test-debug' will do the same to the debug version.
 Building with Clang: it may be possible to use Clang instead of GCC, but this may not work everywhere. To build, run `export CC=clang CXX=clang++' before running `make'.
 
-On Windows:
-Dependencies: Microsoft Visual Studio 2017, CMake 2.8.6 (or later), and Boost 1.55 (or later). You may download them from:
-http://www.microsoft.com/
-http://www.cmake.org/
-http://www.boost.org/
-
 To build, change to a directory where this file is located, and run this commands:
-mkdir build
-cd build
-cmake -G "Visual Studio 15 Win64" ..
+* mkdir build
+* cd build
+* cmake -G "Visual Studio 15 Win64" ..
 
 Then Build within Visual Studio.
+
+### Ubuntu
+
+Install them as follows:
+sudo apt-get update
+sudo apt-get install cmake libboost-all-dev build-essential
+
+To build, change to the dosh directory and run `make'. The resulting executables can be found in dosh/build/release/src.
 
 # Using Dosh
 
