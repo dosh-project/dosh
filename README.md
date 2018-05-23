@@ -37,7 +37,7 @@ funded by the community in the effort to improve the project.
 
 ### On Windows:
 
-You may download them from:
+Download dependencies from:
 * http://gcc.gnu.org/
 * http://www.cmake.org/
 * http://www.boost.org/
@@ -56,18 +56,19 @@ To build, change to a directory where this file is located, and run this command
 
 Then Build within Visual Studio.
 
-### Ubuntu
+### Ubuntu:
 
-Install them as follows:
-sudo apt-get update
-sudo apt-get install cmake libboost-all-dev build-essential
+Install dependencies as follows:
+* sudo apt-get update
+* sudo apt-get install cmake libboost-all-dev build-essential
 
 To build, change to the dosh directory and run `make'. The resulting executables can be found in dosh/build/release/src.
 
-## Mac
+## Mac:
 
-brew install boost
-brew install cmake
+Install dependencies with brew:
+* brew install boost
+* brew install cmake
 
 Install Xcode and Developer Tools
 
