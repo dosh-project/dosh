@@ -64,9 +64,21 @@ sudo apt-get install cmake libboost-all-dev build-essential
 
 To build, change to the dosh directory and run `make'. The resulting executables can be found in dosh/build/release/src.
 
+## Mac
+
+brew install boost
+brew install cmake
+
+Install Xcode and Developer Tools
+
+Finally, make sure you add the following line to your CMakeLists.txt to surpress some warnings:
+* set (CMAKE_CXX_FLAGS "-w")
+
+Then type 'make'
+
 # Using Dosh
 
-On Unix Terminal: 
+On Unix/Mac Terminal: 
 * ./doshd --config dosh.conf
 
 On Windows CMD: 
@@ -74,7 +86,7 @@ On Windows CMD:
 
 
 # Using Simplewallet
-On Unix Terminal: 
+On Unix/Mac Terminal: 
 * ./simplewallet --config dosh.conf
 
 On Windows CMD: 
