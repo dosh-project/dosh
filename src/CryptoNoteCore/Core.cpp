@@ -198,6 +198,7 @@ Core::Core(const Currency& currency, Logging::ILogger& logger, Checkpoints&& che
 
   upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_2, currency.upgradeHeight(BLOCK_MAJOR_VERSION_2));
   upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_3, currency.upgradeHeight(BLOCK_MAJOR_VERSION_3));
+  upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_4, currency.upgradeHeight(BLOCK_MAJOR_VERSION_4));
 
   transactionPool = std::unique_ptr<ITransactionPoolCleanWrapper>(new TransactionPoolCleanWrapper(
     std::unique_ptr<ITransactionPool>(new TransactionPool(logger)),
@@ -1073,7 +1074,7 @@ bool Core::getBlockTemplate(BlockTemplate& b, const AccountPublicAddress& adr, c
   }
 
   if (currency.mandatoryTransaction()) {
-    if (transactionsSize == 0 && height > parameters::CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW) { 
+    if (transactionsSize == 0 && height > parameters::CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW) {
       logger(Logging::ERROR, Logging::BRIGHT_RED) << "Need at least one transaction beside base transaction";
       return false;
     }
@@ -1971,7 +1972,7 @@ BlockDetails Core::getBlockDetails(const Crypto::Hash& blockHash) const {
 
   uint32_t blockIndex = segment->getBlockIndex(blockHash);
   BlockTemplate blockTemplate = restoreBlockTemplate(segment, blockIndex);
-  
+
   BlockDetails blockDetails;
   blockDetails.majorVersion = blockTemplate.majorVersion;
   blockDetails.minorVersion = blockTemplate.minorVersion;
@@ -2123,7 +2124,7 @@ TransactionDetails Core::getTransactionDetails(const Crypto::Hash& transactionHa
   }
   transactionDetails.extra.publicKey = transaction->getTransactionPublicKey();
   transaction->getExtraNonce(transactionDetails.extra.nonce);
-  
+
   transactionDetails.signatures = rawTransaction.signatures;
 
   transactionDetails.inputs.reserve(transaction->getInputCount());
