@@ -651,7 +651,6 @@ std::error_code Core::addBlock(const CachedBlock& cachedBlock, RawBlock&& rawBlo
         ret = error::AddBlockErrorCode::ADDED_TO_MAIN;
 
         const auto& block = cachedBlock.getBlock();
-        // std::cout << "Current Block version = " << block.majorVersion << std::endl;
 
         logger(Logging::DEBUGGING) << "Block " << cachedBlock.getBlockHash() << " added to main chain. Index: " << (previousBlockIndex + 1) << ". Version: " << unsigned(block.majorVersion);
         if ((previousBlockIndex + 1) % 100 == 0) {
