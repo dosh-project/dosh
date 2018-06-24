@@ -88,6 +88,7 @@ namespace
   const command_line::arg_descriptor<uint32_t>    arg_UPGRADE_HEIGHT_V2  = {"UPGRADE_HEIGHT_V2", "uint32_t", 0};
   const command_line::arg_descriptor<uint32_t>    arg_UPGRADE_HEIGHT_V3  = {"UPGRADE_HEIGHT_V3", "uint32_t", 0};
   const command_line::arg_descriptor<uint32_t>    arg_UPGRADE_HEIGHT_V4  = {"UPGRADE_HEIGHT_V4", "uint32_t", 0};
+  const command_line::arg_descriptor<uint32_t>    arg_UPGRADE_HEIGHT_V5  = {"UPGRADE_HEIGHT_V5", "uint32_t", 0};
   const command_line::arg_descriptor<uint32_t>    arg_KEY_IMAGE_CHECKING_BLOCK_INDEX  = {"KEY_IMAGE_CHECKING_BLOCK_INDEX", "uint32_t", 0};
   const command_line::arg_descriptor<size_t>      arg_DIFFICULTY_WINDOW_V1  = {"DIFFICULTY_WINDOW_V1", "size_t", 0};
   const command_line::arg_descriptor<size_t>      arg_DIFFICULTY_WINDOW_V2  = {"DIFFICULTY_WINDOW_V2", "size_t", 0};
@@ -171,6 +172,10 @@ void print_genesis_tx_hex(const po::variables_map& vm, LoggerManager& logManager
     {
       currencyBuilder.upgradeHeightV4(command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V4));
     }
+    if (command_line::has_arg(vm, arg_UPGRADE_HEIGHT_V5) && command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V5) != 0)
+    {
+      currencyBuilder.upgradeHeightV5(command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V5));
+    }
     if (command_line::has_arg(vm, arg_KEY_IMAGE_CHECKING_BLOCK_INDEX) && command_line::get_arg(vm, arg_KEY_IMAGE_CHECKING_BLOCK_INDEX) != 0)
     {
       currencyBuilder.keyImageCheckingBlockIndex(command_line::get_arg(vm, arg_KEY_IMAGE_CHECKING_BLOCK_INDEX));
@@ -253,6 +258,10 @@ currencyBuilder.isBlockexplorer(blockexplorer_mode);
   if (command_line::has_arg(vm, arg_UPGRADE_HEIGHT_V4) && command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V4) != 0)
   {
     currencyBuilder.upgradeHeightV4(command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V4));
+  }
+  if (command_line::has_arg(vm, arg_UPGRADE_HEIGHT_V5) && command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V5) != 0)
+  {
+    currencyBuilder.upgradeHeightV5(command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V5));
   }
   currencyBuilder.difficultyLag(command_line::get_arg(vm, arg_DIFFICULTY_LAG));
   currencyBuilder.difficultyCut(command_line::get_arg(vm, arg_DIFFICULTY_CUT));
@@ -340,6 +349,7 @@ int main(int argc, char* argv[])
     command_line::add_arg(desc_cmd_sett, arg_UPGRADE_HEIGHT_V2);
     command_line::add_arg(desc_cmd_sett, arg_UPGRADE_HEIGHT_V3);
     command_line::add_arg(desc_cmd_sett, arg_UPGRADE_HEIGHT_V4);
+    command_line::add_arg(desc_cmd_sett, arg_UPGRADE_HEIGHT_V5);
     command_line::add_arg(desc_cmd_sett, arg_KEY_IMAGE_CHECKING_BLOCK_INDEX);
     command_line::add_arg(desc_cmd_sett, arg_DIFFICULTY_WINDOW_V1);
     command_line::add_arg(desc_cmd_sett, arg_DIFFICULTY_WINDOW_V2);
@@ -507,6 +517,10 @@ command_line::add_arg(desc_cmd_sett, arg_print_genesis_tx);
     if (command_line::has_arg(vm, arg_UPGRADE_HEIGHT_V4) && command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V4) != 0)
     {
       currencyBuilder.upgradeHeightV4(command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V4));
+    }
+    if (command_line::has_arg(vm, arg_UPGRADE_HEIGHT_V5) && command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V5) != 0)
+    {
+      currencyBuilder.upgradeHeightV5(command_line::get_arg(vm, arg_UPGRADE_HEIGHT_V5));
     }
     if (command_line::has_arg(vm, arg_KEY_IMAGE_CHECKING_BLOCK_INDEX) && command_line::get_arg(vm, arg_KEY_IMAGE_CHECKING_BLOCK_INDEX) != 0)
     {
