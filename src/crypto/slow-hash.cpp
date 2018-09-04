@@ -68,7 +68,6 @@ namespace Crypto {
   cn_context::~cn_context() {
     if (munmap(data, MAP_SIZE) != 0) {
       std::terminate();
-      // throw bad_alloc();
     }
   }
 

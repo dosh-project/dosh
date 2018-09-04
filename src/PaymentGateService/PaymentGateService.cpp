@@ -142,14 +142,6 @@ bool PaymentGateService::init(int argc, char** argv) {
   {
     currencyBuilder.upgradeHeightV3(config.coinBaseConfig.UPGRADE_HEIGHT_V3);
   }
-  if (config.coinBaseConfig.UPGRADE_HEIGHT_V4 && config.coinBaseConfig.UPGRADE_HEIGHT_V4 != 0)
-  {
-    currencyBuilder.upgradeHeightV4(config.coinBaseConfig.UPGRADE_HEIGHT_V4);
-  }
-  if (config.coinBaseConfig.UPGRADE_HEIGHT_V5 && config.coinBaseConfig.UPGRADE_HEIGHT_V5 != 0)
-  {
-    currencyBuilder.upgradeHeightV5(config.coinBaseConfig.UPGRADE_HEIGHT_V5);
-  }
   if (config.coinBaseConfig.KEY_IMAGE_CHECKING_BLOCK_INDEX && config.coinBaseConfig.KEY_IMAGE_CHECKING_BLOCK_INDEX != 0)
   {
     currencyBuilder.keyImageCheckingBlockIndex(config.coinBaseConfig.KEY_IMAGE_CHECKING_BLOCK_INDEX);

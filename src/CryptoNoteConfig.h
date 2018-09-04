@@ -102,9 +102,7 @@ const size_t   FUSION_TX_MIN_IN_OUT_COUNT_RATIO              = 4;
 
 const uint32_t KEY_IMAGE_CHECKING_BLOCK_INDEX                = 0;
 const uint32_t UPGRADE_HEIGHT_V2                             = 27000;
-const uint32_t UPGRADE_HEIGHT_V3                             = 0;//ignore
-const uint32_t UPGRADE_HEIGHT_V4                             = 70000;
-const uint32_t UPGRADE_HEIGHT_V5                             = 70235;
+const uint32_t UPGRADE_HEIGHT_V3                             = 0;
 const unsigned UPGRADE_VOTING_THRESHOLD                      = 90;               // percent
 const uint32_t UPGRADE_VOTING_WINDOW                         = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
 const uint32_t UPGRADE_WINDOW                                = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
@@ -128,8 +126,6 @@ const uint8_t  CURRENT_TRANSACTION_VERSION                   =  TRANSACTION_VERS
 const uint8_t  BLOCK_MAJOR_VERSION_1                         =  1;
 const uint8_t  BLOCK_MAJOR_VERSION_2                         =  2;
 const uint8_t  BLOCK_MAJOR_VERSION_3                         =  3;
-const uint8_t  BLOCK_MAJOR_VERSION_4                         =  4;
-const uint8_t  BLOCK_MAJOR_VERSION_5                         =  5;
 const uint8_t  BLOCK_MINOR_VERSION_0                         =  0;
 const uint8_t  BLOCK_MINOR_VERSION_1                         =  1;
 
@@ -137,8 +133,8 @@ const size_t   BLOCKS_IDS_SYNCHRONIZING_DEFAULT_COUNT        =  10000;  //by def
 const size_t   BLOCKS_SYNCHRONIZING_DEFAULT_COUNT            =  100;    //by default, blocks count in blocks downloading
 const size_t   COMMAND_RPC_GET_BLOCKS_FAST_MAX_COUNT         =  1000;
 
-const int      P2P_DEFAULT_PORT                              =  17333;
-const int      RPC_DEFAULT_PORT                              =  18333;
+const int      P2P_DEFAULT_PORT                              =  27333;
+const int      RPC_DEFAULT_PORT                              =  28333;
 
 const size_t   P2P_LOCAL_WHITE_PEERLIST_LIMIT                =  1000;
 const size_t   P2P_LOCAL_GRAY_PEERLIST_LIMIT                 =  5000;
@@ -161,8 +157,8 @@ const uint32_t  P2P_IP_FAILS_BEFORE_BLOCK                    = 10;
 const uint32_t  P2P_IDLE_CONNECTION_KILL_INTERVAL            = (5*60); //5 minutes
 
 const char* const SEED_NODES[] = {
-"18.188.47.104:17333",
-"18.216.209.246:17333"
+"54.84.202.45:27333",
+"54.173.28.15:27333"
 };
 
 
